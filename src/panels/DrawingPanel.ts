@@ -58,7 +58,7 @@ export class DrawingPanel {
     ]);
     const styleUri = getUri(webview, extensionUri, [
       "webview-ui",
-      "styleUri.css",
+      "style.css",
     ]);
       
     const toolkitUri = getUri(webview, extensionUri, [
@@ -68,7 +68,6 @@ export class DrawingPanel {
       "dist",
       "toolkit.js", // A toolkit.min.js file is also available
     ]);
-    // Tip: Install the es6-string-html VS Code extension to enable code highlighting below
     return /*html*/ `
       <!DOCTYPE html>
       <html lang="en">
@@ -81,9 +80,13 @@ export class DrawingPanel {
         </head>
         <body>
 
+        <div id="color-pallet">
+          <label for="favcolor">Select Color:</label>
+          <input type="color" id="favcolor" name="favcolor" value="#ff0000">
+        </div>
             <script type="module" src="${scriptUri}"></script>
-            <svg xmlns="http://www.w3.org/2000/svg" width="700" height="700" ></svg>
-            <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" width="300" />
+
+            <svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" ></svg>
         </body>
       </html>
     `;

@@ -2,7 +2,7 @@
   "name": "draw-code",
   "displayName": "draw-code",
   "description": "",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.65.0"
   },
@@ -15,6 +15,10 @@
     "onCommand:draw-code.helloWorld",
     "onCommand:draw-code.draw"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Liquidibrium/draw-code"
+  },
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -24,7 +28,7 @@
       },
       {
         "command": "draw-code.draw",
-        "title": "Draw Draw"
+        "title": "Peer Draw"
       }
     ]
   },

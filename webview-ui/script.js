@@ -3,11 +3,9 @@ import * as Y from "https://esm.sh/yjs@13";
 import { WebrtcProvider } from "https://esm.sh/y-webrtc@10";
 
 const ydoc = new Y.Doc();
-const provider = new WebrtcProvider("awesome drawing",
-    
+const provider = new WebrtcProvider("peer-code-drawing-vscode",
     ydoc, {
-    signaling: ["wss://yjs-webrtc-test.herokuapp.com"],
-    password: "test",
+    password: "ROOMTESTPASSWORD",
 });
 
 const svg = document.querySelector("svg");
@@ -25,22 +23,22 @@ const colors = [
   { color: "#1be7ff", light: "#1be7ff33" },
 ];
 
-const names = ["Alice", "Bob", "Stephen", "Francois"];
+document.getElementById("favcolor").addEventListener("change", (e) => {
+   choosenColor =  e.target.value;
+ });
 
 const awareness = provider.awareness;
 
+var choosenColor = oneOf(colors).color;
+
 awareness.setLocalStateField("user", {
-  name: oneOf(names),
-  color: oneOf(colors).color,
+  color: choosenColor,
 });
 
 awareness.on("change", (event) => {
-  console.log("on Change", event);
   svg.querySelectorAll("circle").forEach((circle) => circle.remove());
-  console.log("awareness.client Id ", awareness.clientID);
   awareness.getStates().forEach((state, clientID) => {
-    console.log("state "+ state);
-    console.log("clientID " + clientID);
+    console.log("STATE " + state, "CLIENT_ID " + clientID);
 
     if (clientID === awareness.clientID) {
       return;
@@ -108,7 +106,7 @@ const getSvgStrokeFromYStroke = (ystroke) => {
 };
 
 ystrokes.observe((event) => {
-  console.log("ystrokes observe", event);
+  console.log("ystrokeS observe", event);
   event.changes.added.forEach((item) => {
     item.content.getContent().forEach((ystroke) => {
       const svgPath = document.createElementNS(
@@ -119,11 +117,11 @@ ystrokes.observe((event) => {
       svgPath.setAttribute("fill", ystroke.get("color"));
       svg.appendChild(svgPath);
       ystroke.get("path").observe((event) => {
-        console.log("ystroke path observe", event);
+        console.log("ystroke PATH observe", event);
         svgPath.setAttribute("d", getSvgStrokeFromYStroke(ystroke));
       });
       ystroke.observe((event) => {
-        console.log("ystroke observe", event);
+        console.log("ystroke  observe", event, event.keysChanged);
         if (event.keysChanged.has("color")) {
           svgPath.setAttribute("fill", ystroke.get("color"));
         }
@@ -139,7 +137,7 @@ let currentStroke = null;
 svg.addEventListener("pointerdown", (event) => {
   console.log("pointerdown", event);
   currentStroke = new Y.Map();
-  currentStroke.set("color", oneOf(colors).color);
+  currentStroke.set("color", choosenColor);
   const currentPath = new Y.Array();
   currentPath.push([[event.x, event.y, event.pressure]]);
   currentStroke.set("path", currentPath);
@@ -147,7 +145,6 @@ svg.addEventListener("pointerdown", (event) => {
 });
 
 svg.addEventListener("pointermove", (event) => {
-  console.log("pointermove", event);
   awareness.setLocalStateField("pos", { x: event.x, y: event.y });
   if (event.buttons !== 1) {
     currentStroke = null;
