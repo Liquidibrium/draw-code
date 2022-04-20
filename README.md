@@ -1,6 +1,6 @@
 # draw-code README
 
-This is peer to peer paint <3
+This is WebRTC and Yjs based peer-to-peer VSCode Paint extension   
 
 ```CTRL + SHIFT + P```
 
